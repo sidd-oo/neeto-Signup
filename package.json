@@ -1,0 +1,25 @@
+{
+  "name": "neeto-signup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "cypress": "^7.3.0"
+  },
+  "devDependencies": {
+    "cypress-otp": "^1.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siddharthsahoo-sidd/neeto-Signup.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/siddharthsahoo-sidd/neeto-Signup/issues"
+  },
+  "homepage": "https://github.com/siddharthsahoo-sidd/neeto-Signup#readme"
+}

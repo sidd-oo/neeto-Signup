@@ -1,3 +1,4 @@
 {
-  "baseUrl": "https://app.neetoauth.com"
+  "baseUrl": "https://app.neetoauth.com",
+  "chromeWebSecurity": false
 }

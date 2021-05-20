@@ -23,3 +23,22 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+Cypress.Commands.add('OTPAuth', () => {
+    cy.get('[name="csrf-token"]').then( val => {
+        let csrfTokenMeta = val;
+        cy.request({ 
+            method: 'POST',
+            url: '/api/v1/signups/otp_generation',
+            failOnStatusCode: false, 
+            form: true, 
+            body: {
+                authenticity_token: csrfTokenMeta.attr("content"),
+            },
+        }).then(res => {
+            expect(res.status).to.eq(200);
+            cy.get('[data-cy=signup-otp-otp-number]').type(res.body.otp);
+        })
+        })
+})

@@ -14,5 +14,10 @@ export default {
   organisation: '[data-cy=signup-organization-name-text-field]',
   subdomain: '[data-cy=signup-organization-subdomain-text-field]',
   googleEnable: '[data-cy=signup-organization-enable-google-login-checkbox]',
-  signupBtn: '[data-cy=signup-organization-submit-button]'
+  signupBtn: '[data-cy=signup-organization-submit-button]',
+  cancelSignup: '[data-cy=signup-cancel-link]',
+  cancelSubmit: '[data-cy=modal-submit-button]',
+  cancelModal: '[data-cy=modal-cancel-button]',
+  signupProfileForm: '[data-cy=signup-profile-form]',
+
 };

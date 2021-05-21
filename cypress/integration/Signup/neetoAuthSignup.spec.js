@@ -2,13 +2,14 @@
 
 import { sigupSelectors,  infoDetailsSelectors, OTPSelectors, passwordSelector, organisationSelector, cancelSelectors, profileDashboard, messageSelector } from '../../constants/selectors/selectors'
 import { texts } from '../../constants/texts/texts'
+import { routes } from '../../constants/routes/routes'
 
 describe("NeetoAuth Signup Test Suite",() => {
   let credentials; 
   beforeEach(() => {
-    cy.fixture('metaData').then( info => {
+  cy.fixture('metaData').then( info => {
         credentials = info;
-        cy.visit('/signups/new');
+        cy.visit(routes.signupRoute);
         cy.get(sigupSelectors.email).type(credentials.signupEmail);
         cy.get(sigupSelectors.submitEmail).click();
         
@@ -17,7 +18,7 @@ describe("NeetoAuth Signup Test Suite",() => {
         cy.get(infoDetailsSelectors.country).type('India{downarrow}{enter}')
         cy.get(infoDetailsSelectors.timezone).type('Asia/Kolkata - UTC +5:30')
         cy.get(infoDetailsSelectors.DDMMYYYY).click();
-      })
+  })
   });
 
   it("SignUp using a new email",() => {
@@ -58,7 +59,7 @@ describe("NeetoAuth Signup Test Suite",() => {
     cy.get(cancelSelectors.cancelSignup).click();
     cy.get(cancelSelectors.cancelSubmit).click();
     cy.location().should(loc => {
-          expect(loc.toString()).to.eq('https://app.neetoauth.com/login');
+          expect(loc.toString()).to.eq(routes.loginRoute);
       });
 
   });

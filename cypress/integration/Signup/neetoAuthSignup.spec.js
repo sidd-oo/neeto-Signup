@@ -1,6 +1,7 @@
  /// <reference types="cypress" />
 
 import { sigupSelectors,  infoDetailsSelectors, OTPSelectors, passwordSelector, organisationSelector, cancelSelectors, profileDashboard, messageSelector } from '../../constants/selectors/selectors'
+import { texts } from '../../constants/texts/texts'
 
 describe("NeetoAuth Signup Test Suite",() => {
   let credentials; 
@@ -33,7 +34,7 @@ describe("NeetoAuth Signup Test Suite",() => {
     cy.get(organisationSelector.googleEnable).click();
     cy.get(organisationSelector.signupBtn).click();
 
-    cy.get(profileDashboard.header).should('have.text',"Organization Settings");
+    cy.get(profileDashboard.header).should('have.text',texts.profileDashboardTitle);
 
   });
 
@@ -49,7 +50,7 @@ describe("NeetoAuth Signup Test Suite",() => {
     cy.get(organisationSelector.organisation).type("BigBinary");
     cy.get(organisationSelector.subdomain).should('not.have.value', '');
 
-    cy.contains("Subdomain 'bigbinary' is not available").should("be.visible");
+    cy.contains(texts.suggestionSubdomainNotAvaliable).should("be.visible");
 
   });
 
@@ -74,7 +75,7 @@ describe("NeetoAuth Signup Test Suite",() => {
 
     cy.get(OTPSelectors.OTP).type("123756");
     cy.get(OTPSelectors.submitOTP).click();
-    cy.get(messagesSelector.messageBox).should('have.text',"Something went wrong.");
+    cy.get(messagesSelector.messageBox).should('have.text',texts.wentWrong);
 
   });
 
@@ -89,7 +90,7 @@ describe("NeetoAuth Signup Test Suite",() => {
 
   });
 
-  it.only("Entering organisation name less than 2 characters",() => {
+  it("Entering organisation name less than 2 characters",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
     cy.OTPAuth();
@@ -103,7 +104,7 @@ describe("NeetoAuth Signup Test Suite",() => {
     cy.get(organisationSelector.googleEnable).click();
     cy.get(organisationSelector.signupBtn).click();
 
-    cy.get(messageSelector.suggestion).should('have.text','Please enter minimum 2 characters');
+    cy.get(messageSelector.suggestion).should('have.text',texts.orgMinimumCharacterSuggestion);
 
   });
 });

@@ -21,7 +21,7 @@ describe("NeetoAuth Signup Test Suite",() => {
   })
   });
 
-  it("SignUp using a new email",() => {
+  it("Should be able to signup",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
     cy.OTPAuth();
@@ -55,7 +55,7 @@ describe("NeetoAuth Signup Test Suite",() => {
 
   });
 
-  it("Cancelling the SignUp process",() => {
+  it("Should be able to cancel the Signup process",() => {
     cy.get(cancelSelectors.cancelSignup).click();
     cy.get(cancelSelectors.cancelSubmit).click();
     cy.location().should(loc => {
@@ -64,14 +64,14 @@ describe("NeetoAuth Signup Test Suite",() => {
 
   });
 
-  it("Abotting the cancellation of SignUp process",() => {
+  it("Should be able to abort the cancellation step",() => {
     cy.get(cancelSelectors.cancelSignup).click();
     cy.get(cancelSelectors.cancelModal).click();
     cy.get(infoDetailsSelectors.signupProfileForm).should('be.visible');
 
   });
 
-  it("Entering invalid 6 digit OTP",() => {
+  it("Should give an error 'Something went wrong' when invalid 6 digit OTP is passed",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
     cy.get(OTPSelectors.OTP).type("123756");
@@ -91,7 +91,7 @@ describe("NeetoAuth Signup Test Suite",() => {
 
   });
 
-  it("Entering organisation name less than 2 characters",() => {
+  it("Should give an suggestive warning when organisation name less than 2 characters is passed",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
     cy.OTPAuth();

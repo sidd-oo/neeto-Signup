@@ -1,61 +1,61 @@
  /// <reference types="cypress" />
 
-import selector from '../../support/selectors'
+import { sigupSelectors,  infoDetailsSelectors, OTPSelectors, passwordSelector, organisationSelector, cancelSelectors, profileDashboard, messageSelector } from '../../constants/selectors/selectors'
 
 describe("NeetoAuth Signup Test Suite",() => {
-  let credentials;
+  let credentials; 
   beforeEach(() => {
-    cy.fixture('metaData').then(info => {
+    cy.fixture('metaData').then( info => {
         credentials = info;
         cy.visit('/signups/new');
-        cy.get(selector.email).type(credentials.signupEmail);
-        cy.get(selector.submitEmail).click();
+        cy.get(sigupSelectors.email).type(credentials.signupEmail);
+        cy.get(sigupSelectors.submitEmail).click();
         
-        cy.get(selector.firstName).clear().type(credentials.firstName);
-        cy.get(selector.lastName).clear().type(credentials.lastName);
-        cy.get(selector.country).type('India{downarrow}{enter}')
-        cy.get(selector.timezone).type('Asia/Kolkata - UTC +5:30')
-        cy.get(selector.DDMMYYYY).click();
+        cy.get(infoDetailsSelectors.firstName).clear().type(credentials.firstName);
+        cy.get(infoDetailsSelectors.lastName).clear().type(credentials.lastName);
+        cy.get(infoDetailsSelectors.country).type('India{downarrow}{enter}')
+        cy.get(infoDetailsSelectors.timezone).type('Asia/Kolkata - UTC +5:30')
+        cy.get(infoDetailsSelectors.DDMMYYYY).click();
       })
   });
 
   it("SignUp using a new email",() => {
-    cy.get(selector.submitProfile).click(); 
+    cy.get(infoDetailsSelectors.submitProfile).click(); 
 
     cy.OTPAuth();
-    cy.get(selector.submitOTP).click();
+    cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(selector.password).type(credentials.password);
-    cy.get(selector.submitPassword).click();
+    cy.get(passwordSelector.password).type(credentials.password);
+    cy.get(passwordSelector.submitPassword).click();
 
-    cy.get(selector.organisation).type(credentials.organisation);
-    cy.get(selector.subdomain).should('not.have.value', '');
-    cy.get(selector.googleEnable).click();
-    cy.get(selector.signupBtn).click();
+    cy.get(organisationSelector.organisation).type(credentials.organisation);
+    cy.get(organisationSelector.subdomain).should('not.have.value', '');
+    cy.get(organisationSelector.googleEnable).click();
+    cy.get(organisationSelector.signupBtn).click();
 
-    cy.get('[data-cy=heading]').should('have.text',"Organization Settings");
+    cy.get(profileDashboard.header).should('have.text',"Organization Settings");
 
   });
 
   it("Should suggest new subdomain, if subdomain is not available",() => {
-    cy.get(selector.submitProfile).click();
+    cy.get(infoDetailsSelectors.submitProfile).click();
 
     cy.OTPAuth();
-    cy.get(selector.submitOTP).click();
+    cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(selector.password).type(credentials.password);
-    cy.get(selector.submitPassword).click();
+    cy.get(passwordSelector.password).type(credentials.password);
+    cy.get(passwordSelector.submitPassword).click();
 
-    cy.get(selector.organisation).type("BigBinary");
-    cy.get('[data-cy=signup-organization-subdomain-text-field]').should('not.have.value', '');
+    cy.get(organisationSelector.organisation).type("BigBinary");
+    cy.get(organisationSelector.subdomain).should('not.have.value', '');
 
     cy.contains("Subdomain 'bigbinary' is not available").should("be.visible");
 
   });
 
   it("Cancelling the SignUp process",() => {
-    cy.get(selector.cancelSignup).click();
-    cy.get(selector.cancelSubmit).click();
+    cy.get(cancelSelectors.cancelSignup).click();
+    cy.get(cancelSelectors.cancelSubmit).click();
     cy.location().should(loc => {
           expect(loc.toString()).to.eq('https://app.neetoauth.com/login');
       });
@@ -63,47 +63,47 @@ describe("NeetoAuth Signup Test Suite",() => {
   });
 
   it("Abotting the cancellation of SignUp process",() => {
-    cy.get(selector.cancelSignup).click();
-    cy.get(selector.cancelModal).click();
-    cy.get(selector.signupProfileForm).should('be.visible');
+    cy.get(cancelSelectors.cancelSignup).click();
+    cy.get(cancelSelectors.cancelModal).click();
+    cy.get(infoDetailsSelectors.signupProfileForm).should('be.visible');
 
   });
 
-    it.only("Entering invalid 6 digit OTP",() => {
-    cy.get(selector.submitProfile).click(); 
+  it("Entering invalid 6 digit OTP",() => {
+    cy.get(infoDetailsSelectors.submitProfile).click(); 
 
-    cy.get('[data-cy=signup-otp-otp-number]').type("123756");
-    cy.get(selector.submitOTP).click();
-    cy.get('[data-cy=toastr-message-container]').should('have.text',"Something went wrong.");
+    cy.get(OTPSelectors.OTP).type("123756");
+    cy.get(OTPSelectors.submitOTP).click();
+    cy.get(messagesSelector.messageBox).should('have.text',"Something went wrong.");
 
   });
 
   it("Setting up the password less than 5 character",() => {
-    cy.get(selector.submitProfile).click(); 
+    cy.get(infoDetailsSelectors.submitProfile).click(); 
 
     cy.OTPAuth();
-    cy.get(selector.submitOTP).click();
+    cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(selector.password).type('meow');
-    cy.get(selector.submitPassword).click();
+    cy.get(passwordSelector.password).type('meow');
+    cy.get(passwordSelector.submitPassword).click();
 
   });
 
-  it("Entering organisation name less than 2 characters",() => {
-    cy.get(selector.submitProfile).click(); 
+  it.only("Entering organisation name less than 2 characters",() => {
+    cy.get(infoDetailsSelectors.submitProfile).click(); 
 
     cy.OTPAuth();
-    cy.get(selector.submitOTP).click();
+    cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(selector.password).type(credentials.password);
-    cy.get(selector.submitPassword).click();
+    cy.get(passwordSelector.password).type(credentials.password);
+    cy.get(passwordSelector.submitPassword).click();
 
-    cy.get(selector.organisation).type("a");
-    cy.get(selector.subdomain).type('a')
-    cy.get(selector.googleEnable).click();
-    cy.get(selector.signupBtn).click();
+    cy.get(organisationSelector.organisation).type("a");
+    cy.get(organisationSelector.subdomain).type('a')
+    cy.get(organisationSelector.googleEnable).click();
+    cy.get(organisationSelector.signupBtn).click();
 
-    cy.get('#error_1').should('have.text','Please enter minimum 2 characters');
+    cy.get(messageSelector.suggestion).should('have.text','Please enter minimum 2 characters');
 
   });
 });

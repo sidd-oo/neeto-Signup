@@ -3,26 +3,18 @@
 import { sigupSelectors,  infoDetailsSelectors, OTPSelectors, passwordSelector, organisationSelector, cancelSelectors, profileDashboard, messageSelector } from '../../constants/selectors/selectors'
 import { texts } from '../../constants/texts/texts'
 import { routes } from '../../constants/routes/routes'
+import { formFill } from '../../utils/formFill';
+const faker = require('faker');
 
 describe("NeetoAuth Signup Test Suite",() => {
-  let credentials; 
   let orgName = "BigBinary";
   let invalidOTP = "123756";
   let invalidPassword = 'meow';
+  let randomPassword = faker.internet.password();
+  let randomOrgName = faker.random.word();
 
   beforeEach(() => {
-  cy.fixture('metaData').then( info => {
-        credentials = info;
-        cy.visit(routes.signupRoute);
-        cy.get(sigupSelectors.email).type(credentials.signupEmail);
-        cy.get(sigupSelectors.submitEmail).click();
-        
-        cy.get(infoDetailsSelectors.firstName).clear().type(credentials.firstName);
-        cy.get(infoDetailsSelectors.lastName).clear().type(credentials.lastName);
-        cy.get(infoDetailsSelectors.country).type('India{downarrow}{enter}')
-        cy.get(infoDetailsSelectors.timezone).type('Asia/Kolkata - UTC +5:30')
-        cy.get(infoDetailsSelectors.DDMMYYYY).click();
-  })
+     formFill();
   });
 
   it("Should be able to signup",() => {
@@ -31,10 +23,10 @@ describe("NeetoAuth Signup Test Suite",() => {
     cy.OTPAuth(routes.postRequestOTP);
     cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(passwordSelector.password).type(credentials.password);
+    cy.get(passwordSelector.password).type(randomPassword);
     cy.get(passwordSelector.submitPassword).click();
 
-    cy.get(organisationSelector.organisation).type(credentials.organisation);
+    cy.get(organisationSelector.organisation).type(randomOrgName);
     cy.get(organisationSelector.subdomain).should('not.have.value', '');
     cy.get(organisationSelector.googleEnable).click();
     cy.get(organisationSelector.signupBtn).click();
@@ -49,7 +41,7 @@ describe("NeetoAuth Signup Test Suite",() => {
     cy.OTPAuth(routes.postRequestOTP);
     cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(passwordSelector.password).type(credentials.password);
+    cy.get(passwordSelector.password).type(randomPassword);
     cy.get(passwordSelector.submitPassword).click();
 
     cy.get(organisationSelector.organisation).type(orgName);
@@ -101,7 +93,7 @@ describe("NeetoAuth Signup Test Suite",() => {
     cy.OTPAuth(routes.postRequestOTP);
     cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(passwordSelector.password).type(credentials.password);
+    cy.get(passwordSelector.password).type(randomPassword);
     cy.get(passwordSelector.submitPassword).click();
 
     cy.get(organisationSelector.organisation).type("a");

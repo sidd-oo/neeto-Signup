@@ -6,6 +6,10 @@ import { routes } from '../../constants/routes/routes'
 
 describe("NeetoAuth Signup Test Suite",() => {
   let credentials; 
+  let orgName = "BigBinary";
+  let invalidOTP = "123756";
+  let invalidPassword = 'meow';
+
   beforeEach(() => {
   cy.fixture('metaData').then( info => {
         credentials = info;
@@ -24,7 +28,7 @@ describe("NeetoAuth Signup Test Suite",() => {
   it("Should be able to signup",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
-    cy.OTPAuth();
+    cy.OTPAuth(routes.postRequestOTP);
     cy.get(OTPSelectors.submitOTP).click();
 
     cy.get(passwordSelector.password).type(credentials.password);
@@ -42,13 +46,13 @@ describe("NeetoAuth Signup Test Suite",() => {
   it("Should suggest new subdomain, if subdomain is not available",() => {
     cy.get(infoDetailsSelectors.submitProfile).click();
 
-    cy.OTPAuth();
+    cy.OTPAuth(routes.postRequestOTP);
     cy.get(OTPSelectors.submitOTP).click();
 
     cy.get(passwordSelector.password).type(credentials.password);
     cy.get(passwordSelector.submitPassword).click();
 
-    cy.get(organisationSelector.organisation).type("BigBinary");
+    cy.get(organisationSelector.organisation).type(orgName);
     cy.get(organisationSelector.subdomain).should('not.have.value', '');
 
     cy.contains(texts.suggestionSubdomainNotAvaliable).should("be.visible");
@@ -74,7 +78,7 @@ describe("NeetoAuth Signup Test Suite",() => {
   it("Should give an error 'Something went wrong' when invalid 6 digit OTP is passed",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
-    cy.get(OTPSelectors.OTP).type("123756");
+    cy.get(OTPSelectors.OTP).type(invalidOTP);
     cy.get(OTPSelectors.submitOTP).click();
     cy.get(messagesSelector.messageBox).should('have.text',texts.wentWrong);
 
@@ -83,10 +87,10 @@ describe("NeetoAuth Signup Test Suite",() => {
   it("Setting up the password less than 5 character",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
-    cy.OTPAuth();
+    cy.OTPAuth(routes.postRequestOTP);
     cy.get(OTPSelectors.submitOTP).click();
 
-    cy.get(passwordSelector.password).type('meow');
+    cy.get(passwordSelector.password).type(invalidPassword);
     cy.get(passwordSelector.submitPassword).click();
 
   });
@@ -94,7 +98,7 @@ describe("NeetoAuth Signup Test Suite",() => {
   it("Should give an suggestive warning when organisation name less than 2 characters is passed",() => {
     cy.get(infoDetailsSelectors.submitProfile).click(); 
 
-    cy.OTPAuth();
+    cy.OTPAuth(routes.postRequestOTP);
     cy.get(OTPSelectors.submitOTP).click();
 
     cy.get(passwordSelector.password).type(credentials.password);

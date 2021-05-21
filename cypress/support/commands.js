@@ -25,12 +25,12 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 
-Cypress.Commands.add('OTPAuth', () => {
+Cypress.Commands.add('OTPAuth', (urlOTP) => {
     cy.get('[name="csrf-token"]').then( val => {
         let csrfTokenMeta = val;
         cy.request({ 
             method: 'POST',
-            url: '/api/v1/signups/otp_generation',
+            url: urlOTP,
             failOnStatusCode: false, 
             form: true, 
             body: {
